@@ -1,3 +1,4 @@
+![BC-GeneExplorer Banner](./banner.png)
   # 🧬 BC-GeneExplorer: Breast Cancer Gene Expression Tool
 
 A student-built Python application to explore and visualize gene expression differences in breast cancer vs. normal tissue — based on real data from **GSE15852**, focused on South Asian women.
