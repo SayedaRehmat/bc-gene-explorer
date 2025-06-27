@@ -50,7 +50,7 @@ A student-built Python application to explore and visualize gene expression diff
 ## 📸 Sample Output
 
 
-![Bar Graph Sample](https://via.placeholder.com/500x300.png?text=Tumor+vs+Normal+Expression)
+![Bar Graph Sample](output.png)
 
 ---
 
