@@ -1,5 +1,4 @@
-import matplotlib.pyplot as plt
-import streamlit as st
+ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -14,7 +13,7 @@ Explore breast cancer gene expression in tumor vs. normal tissue
 **Based on Malaysian dataset GSE15852**
 """)
 
-# User input
+# Gene input
 gene = st.text_input("Enter Gene Symbol (e.g., TP53, BRCA1)").upper()
 
 # Search and display results
@@ -43,3 +42,5 @@ if gene:
         st.pyplot(fig)
     else:
         st.error(f"Gene '{gene}' not found in dataset.")
+
+        
