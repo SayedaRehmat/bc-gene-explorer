@@ -2,94 +2,74 @@ import streamlit as st
 import pandas as pd
 import json
 import plotly.express as px
+import subprocess
+import os
 
-# -----------------------------
-# Page Config
-# -----------------------------
+# =============================
+# PAGE CONFIG
+# =============================
 st.set_page_config(
     page_title="BC Gene Explorer",
     page_icon="🧬",
     layout="wide"
 )
 
-# -----------------------------
-# Custom CSS
-# -----------------------------
+# =============================
+# PROFESSIONAL THEME (FIXED)
+# =============================
 st.markdown("""
 <style>
-    .main {
-        background-color: #f8fbff;
-    }
 
-    .block-container {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-        padding-left: 2rem;
-        padding-right: 2rem;
-    }
+/* Background */
+.stApp {
+    background-color: #f4f8fc;
+}
 
-    h1, h2, h3 {
-        color: #102a43;
-        font-family: 'Arial', sans-serif;
-    }
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background-color: #0f172a;
+}
+section[data-testid="stSidebar"] * {
+    color: white;
+}
 
-    .subtitle {
-        font-size: 1rem;
-        color: #486581;
-        margin-top: -10px;
-        margin-bottom: 20px;
-    }
+/* Titles */
+h1, h2, h3 {
+    color: #0f172a;
+}
 
-    .metric-card {
-        background: white;
-        padding: 20px;
-        border-radius: 16px;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
-        border: 1px solid #e6edf5;
-        text-align: center;
-    }
+/* Metric Cards */
+div[data-testid="stMetric"] {
+    background: white;
+    padding: 18px;
+    border-radius: 14px;
+    box-shadow: 0px 3px 12px rgba(0,0,0,0.08);
+}
 
-    .info-card {
-        background: white;
-        padding: 18px;
-        border-radius: 16px;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
-        border: 1px solid #e6edf5;
-        margin-bottom: 15px;
-    }
+/* Buttons */
+.stButton button {
+    background-color: #2563eb;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    padding: 0.6rem 1rem;
+}
 
-    .status-up {
-        color: #b42318;
-        font-weight: 700;
-    }
+.stButton button:hover {
+    background-color: #1d4ed8;
+}
 
-    .status-down {
-        color: #175cd3;
-        font-weight: 700;
-    }
+/* Info boxes */
+div.stAlert {
+    border-radius: 12px;
+}
 
-    .status-stable {
-        color: #027a48;
-        font-weight: 700;
-    }
-
-    .footer {
-        text-align: center;
-        color: #7b8794;
-        font-size: 0.85rem;
-        margin-top: 30px;
-    }
-
-    section[data-testid="stSidebar"] {
-        background-color: #eef4fa;
-        border-right: 1px solid #d9e2ec;
-    }
 </style>
 """, unsafe_allow_html=True)
 
-# -----------------------------
-# Load Data
-# -----------------------------
+# =============================
+# LOAD DATA (ONLY 2 FILES)
+# =============================
 @st.cache_data
 def load_expression():
     return pd.read_csv("data/mock_expression.csv")
@@ -102,73 +82,64 @@ def load_gene_info():
 expr_df = load_expression()
 gene_info = load_gene_info()
 
-# -----------------------------
-# Sidebar
-# -----------------------------
-st.sidebar.markdown("## 🧬 BC Gene Explorer")
-st.sidebar.markdown("Explore breast cancer biomarker signals")
-st.sidebar.divider()
+# =============================
+# HEADER
+# =============================
+st.title("🧬 BC Gene Explorer")
+st.markdown("**Breast cancer gene expression & biomarker interpretation platform (mock prototype)**")
 
-selected_gene = st.sidebar.selectbox("Select Gene", expr_df["gene"].tolist())
+st.divider()
 
-st.sidebar.markdown("### Legend")
-st.sidebar.markdown("🟥 Upregulated")
-st.sidebar.markdown("🟦 Downregulated")
-st.sidebar.markdown("🟩 Stable")
+# =============================
+# SIDEBAR
+# =============================
+st.sidebar.title("Gene Selection")
+
+selected_gene = st.sidebar.selectbox(
+    "Choose gene",
+    expr_df["gene"].tolist()
+)
 
 gene_row = expr_df[expr_df["gene"] == selected_gene].iloc[0]
 gene_meta = gene_info[selected_gene]
 
-# -----------------------------
-# Header
-# -----------------------------
-colA, colB = st.columns([6, 1])
+# =============================
+# REPORT BUTTON (FIXED FEATURE)
+# =============================
+st.sidebar.divider()
 
-with colA:
-    st.markdown("# 🧬 BC Gene Explorer")
-    st.markdown(
-        "<div class='subtitle'>Breast cancer gene expression visualizer for biomarker exploration and pathway-level interpretation.</div>",
-        unsafe_allow_html=True
-    )
+if st.sidebar.button("📄 Generate PDF Report"):
+    with st.spinner("Generating report..."):
+        result = subprocess.run(
+            ["python", "report.py"],
+            capture_output=True,
+            text=True
+        )
 
-with colB:
-    st.markdown(
-        "<div style='background:#dbeafe;padding:10px 14px;border-radius:12px;text-align:center;font-weight:600;color:#1d4ed8;'>Prototype v1</div>",
-        unsafe_allow_html=True
-    )
+    if result.returncode == 0:
+        st.sidebar.success("Report generated successfully")
+        st.sidebar.info("Saved in reports/sample_gene_report.pdf")
+    else:
+        st.sidebar.error("Report generation failed")
+        st.sidebar.text(result.stderr)
 
-st.divider()
+# =============================
+# SUMMARY METRICS
+# =============================
+col1, col2, col3 = st.columns(3)
 
-# -----------------------------
-# Summary Cards
-# -----------------------------
-c1, c2, c3 = st.columns(3)
+col1.metric("Tumor Expression", gene_row["tumor_mean"])
+col2.metric("Normal Expression", gene_row["normal_mean"])
+col3.metric("log2 Fold Change", gene_row["log2_fc"])
 
-with c1:
-    st.markdown(f"<div class='metric-card'><h3>Tumor Mean</h3><h2>{gene_row['tumor_mean']}</h2></div>", unsafe_allow_html=True)
-
-with c2:
-    st.markdown(f"<div class='metric-card'><h3>Normal Mean</h3><h2>{gene_row['normal_mean']}</h2></div>", unsafe_allow_html=True)
-
-with c3:
-    st.markdown(f"<div class='metric-card'><h3>log2 Fold Change</h3><h2>{gene_row['log2_fc']}</h2></div>", unsafe_allow_html=True)
-
-st.markdown("<br>", unsafe_allow_html=True)
-
-status_class = {
-    "Upregulated": "status-up",
-    "Downregulated": "status-down",
-    "Stable": "status-stable"
-}[gene_row["status"]]
-
-st.markdown(f"### Expression Status: <span class='{status_class}'>{gene_row['status']}</span>", unsafe_allow_html=True)
+st.markdown(f"### Status: **{gene_row['status']}**")
 
 st.divider()
 
-# -----------------------------
-# Expression Plot
-# -----------------------------
-st.subheader("Expression View")
+# =============================
+# EXPRESSION PLOT
+# =============================
+st.subheader("Expression Profile")
 
 plot_df = pd.DataFrame({
     "Condition": ["Normal", "Tumor"],
@@ -181,51 +152,47 @@ fig = px.bar(
     y="Expression",
     text="Expression",
     color="Condition",
-    title=f"{selected_gene}: Tumor vs Normal Expression",
-    height=430
+    height=420
 )
 
 fig.update_layout(
     plot_bgcolor="white",
-    paper_bgcolor="white",
-    font=dict(color="#102a43"),
-    showlegend=False
+    paper_bgcolor="white"
 )
 
 fig.update_traces(textposition="outside")
+
 st.plotly_chart(fig, use_container_width=True)
 
-# -----------------------------
-# Biological Interpretation
-# -----------------------------
+# =============================
+# BIOLOGICAL INTERPRETATION
+# =============================
 st.subheader("Biological Interpretation")
 
-x1, x2 = st.columns(2)
+c1, c2 = st.columns(2)
 
-with x1:
-    st.markdown(f"<div class='info-card'><b>Function</b><br>{gene_meta['function']}</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='info-card'><b>Pathway</b><br>{gene_meta['pathway']}</div>", unsafe_allow_html=True)
+with c1:
+    st.info(f"**Function**\n\n{gene_meta['function']}")
+    st.info(f"**Pathway**\n\n{gene_meta['pathway']}")
 
-with x2:
-    st.markdown(f"<div class='info-card'><b>Biomarker Role</b><br>{gene_meta['biomarker_role']}</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='info-card'><b>Clinical Note</b><br>{gene_meta['clinical_note']}</div>", unsafe_allow_html=True)
+with c2:
+    st.success(f"**Biomarker Role**\n\n{gene_meta['biomarker_role']}")
+    st.warning(f"**Clinical Insight**\n\n{gene_meta['clinical_note']}")
 
 st.divider()
 
-# -----------------------------
-# Statistical Summary
-# -----------------------------
+# =============================
+# STATISTICS PANEL
+# =============================
 st.subheader("Statistical Summary")
 
-s1, s2 = st.columns(2)
+c1, c2 = st.columns(2)
 
-with s1:
-    st.markdown(f"<div class='metric-card'><h3>P-value</h3><h2>{gene_row['p_value']}</h2></div>", unsafe_allow_html=True)
+c1.metric("P-value", gene_row["p_value"])
+c2.metric("Expression Status", gene_row["status"])
 
-with s2:
-    st.markdown(f"<div class='metric-card'><h3>Status</h3><h2>{gene_row['status']}</h2></div>", unsafe_allow_html=True)
-
-# -----------------------------
-# Footer
-# -----------------------------
-st.markdown("<div class='footer'>BC Gene Explorer | Prototype for rapid breast cancer biomarker interpretation</div>", unsafe_allow_html=True)
+# =============================
+# FOOTER
+# =============================
+st.divider()
+st.caption("BC Gene Explorer | Mock translational bioinformatics dashboard (Streamlit prototype)")
