@@ -20,48 +20,88 @@ st.set_page_config(
 st.markdown("""
 <style>
 
-/* Background */
+/* =========================
+   GLOBAL BACKGROUND
+========================= */
 .stApp {
-    background-color: #f4f8fc;
+    background-color: #eef4fb;
 }
 
-/* Sidebar */
+/* =========================
+   MAIN CONTENT AREA (IMPORTANT FIX)
+========================= */
+[data-testid="stAppViewContainer"] {
+    background-color: #eef4fb;
+}
+
+/* main block container */
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    background-color: #eef4fb;
+}
+
+/* =========================
+   SIDEBAR (KEEP STRONG)
+========================= */
 section[data-testid="stSidebar"] {
     background-color: #0f172a;
 }
+
 section[data-testid="stSidebar"] * {
     color: white;
 }
 
-/* Titles */
+/* =========================
+   HEADINGS
+========================= */
 h1, h2, h3 {
     color: #0f172a;
+    font-weight: 700;
 }
 
-/* Metric Cards */
+/* =========================
+   METRIC CARDS (MAKE VISIBLE)
+========================= */
 div[data-testid="stMetric"] {
     background: white;
-    padding: 18px;
-    border-radius: 14px;
-    box-shadow: 0px 3px 12px rgba(0,0,0,0.08);
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0px 6px 18px rgba(0,0,0,0.10);
+    border: 1px solid #e6eef7;
 }
 
-/* Buttons */
+/* =========================
+   BUTTONS
+========================= */
 .stButton button {
     background-color: #2563eb;
     color: white;
     border-radius: 10px;
-    border: none;
     padding: 0.6rem 1rem;
+    border: none;
+    font-weight: 600;
 }
 
 .stButton button:hover {
     background-color: #1d4ed8;
 }
 
-/* Info boxes */
+/* =========================
+   INFO BOXES
+========================= */
 div.stAlert {
-    border-radius: 12px;
+    border-radius: 14px;
+    border: 1px solid #dbeafe;
+}
+
+/* =========================
+   REMOVE WHITE “FLAT LOOK”
+========================= */
+[data-testid="stVerticalBlock"] {
+    gap: 1rem;
 }
 
 </style>
