@@ -1,0 +1,122 @@
+{
+  "BRCA1": {
+    "function": "DNA damage repair and homologous recombination.",
+    "pathway": "Homologous Recombination Repair",
+    "biomarker_role": "Tumor suppressor and hereditary breast cancer biomarker.",
+    "clinical_note": "Frequently altered in hereditary breast and ovarian cancer."
+  },
+  "BRCA2": {
+    "function": "DNA repair through homologous recombination.",
+    "pathway": "DNA Damage Response",
+    "biomarker_role": "Hereditary cancer susceptibility biomarker.",
+    "clinical_note": "Associated with genomic instability and DNA repair defects."
+  },
+  "TP53": {
+    "function": "Cell cycle regulation and apoptosis control.",
+    "pathway": "p53 Signaling",
+    "biomarker_role": "Major tumor suppressor altered in aggressive tumors.",
+    "clinical_note": "Commonly associated with poor prognosis and genomic instability."
+  },
+  "ERBB2": {
+    "function": "Receptor tyrosine kinase driving cell proliferation.",
+    "pathway": "HER2 Signaling",
+    "biomarker_role": "Predictive biomarker for HER2-positive breast cancer.",
+    "clinical_note": "Clinically actionable target for trastuzumab-based therapy."
+  },
+  "ESR1": {
+    "function": "Estrogen receptor mediating hormone signaling.",
+    "pathway": "Estrogen Signaling",
+    "biomarker_role": "Hormone receptor biomarker for luminal subtype.",
+    "clinical_note": "Guides endocrine therapy decisions."
+  },
+  "PGR": {
+    "function": "Progesterone receptor involved in hormone response.",
+    "pathway": "Steroid Hormone Signaling",
+    "biomarker_role": "Luminal subtype and endocrine response marker.",
+    "clinical_note": "Used with ER status for clinical subtype classification."
+  },
+  "MKI67": {
+    "function": "Cell proliferation marker.",
+    "pathway": "Cell Cycle",
+    "biomarker_role": "Proliferation and prognostic biomarker.",
+    "clinical_note": "High expression is associated with aggressive proliferation."
+  },
+  "MYC": {
+    "function": "Transcription factor promoting proliferation.",
+    "pathway": "MYC Signaling",
+    "biomarker_role": "Oncogenic proliferation biomarker.",
+    "clinical_note": "Often elevated in aggressive and proliferative tumors."
+  },
+  "PTEN": {
+    "function": "Negative regulator of PI3K/AKT signaling.",
+    "pathway": "PI3K/AKT Pathway",
+    "biomarker_role": "Tumor suppressor and signaling regulator.",
+    "clinical_note": "Loss may indicate pathway activation and poor prognosis."
+  },
+  "CDH1": {
+    "function": "Cell adhesion and epithelial integrity.",
+    "pathway": "Cell Adhesion",
+    "biomarker_role": "Epithelial marker and invasion suppressor.",
+    "clinical_note": "Reduced expression may indicate invasive progression."
+  },
+  "GATA3": {
+    "function": "Luminal differentiation transcription factor.",
+    "pathway": "Luminal Differentiation",
+    "biomarker_role": "Luminal lineage biomarker.",
+    "clinical_note": "Associated with differentiated luminal tumors."
+  },
+  "FOXA1": {
+    "function": "Chromatin remodeling and ER co-regulation.",
+    "pathway": "Hormone Receptor Regulation",
+    "biomarker_role": "Luminal regulatory biomarker.",
+    "clinical_note": "Supports endocrine-responsive luminal identity."
+  },
+  "KRT5": {
+    "function": "Basal epithelial cytoskeletal marker.",
+    "pathway": "Cytoskeleton Organization",
+    "biomarker_role": "Basal-like subtype biomarker.",
+    "clinical_note": "Commonly elevated in basal/triple-negative tumors."
+  },
+  "KRT14": {
+    "function": "Basal epithelial structural marker.",
+    "pathway": "Cytoskeleton Organization",
+    "biomarker_role": "Basal-like breast cancer marker.",
+    "clinical_note": "Associated with aggressive basal phenotype."
+  },
+  "EGFR": {
+    "function": "Growth factor receptor promoting proliferation.",
+    "pathway": "EGFR Signaling",
+    "biomarker_role": "Basal-like and proliferative biomarker.",
+    "clinical_note": "Often elevated in triple-negative breast cancer."
+  },
+  "BCL2": {
+    "function": "Anti-apoptotic regulator.",
+    "pathway": "Apoptosis Regulation",
+    "biomarker_role": "Survival and hormone-associated biomarker.",
+    "clinical_note": "Often associated with luminal and better prognosis."
+  },
+  "CCND1": {
+    "function": "Cell cycle progression regulator.",
+    "pathway": "Cell Cycle",
+    "biomarker_role": "Proliferation-associated oncogene.",
+    "clinical_note": "Amplification is common in luminal tumors."
+  },
+  "AKT1": {
+    "function": "Serine/threonine kinase in growth signaling.",
+    "pathway": "PI3K/AKT Pathway",
+    "biomarker_role": "Signaling and survival biomarker.",
+    "clinical_note": "Frequently involved in oncogenic signaling activation."
+  },
+  "PIK3CA": {
+    "function": "Catalytic subunit of PI3K signaling.",
+    "pathway": "PI3K/AKT Pathway",
+    "biomarker_role": "Common breast cancer driver biomarker.",
+    "clinical_note": "Frequently altered in hormone receptor-positive tumors."
+  },
+  "MAP3K1": {
+    "function": "Kinase involved in stress and MAPK signaling.",
+    "pathway": "MAPK Signaling",
+    "biomarker_role": "Signaling pathway biomarker.",
+    "clinical_note": "Commonly altered in luminal breast tumors."
+  }
+}
