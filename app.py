@@ -21,92 +21,93 @@ st.markdown("""
 <style>
 
 /* =========================
-   GLOBAL BACKGROUND
+   GLOBAL APP
 ========================= */
-.stApp {
-    background-color: #eef4fb;
+html, body, [class*="css"] {
+    background-color: #0b1220 !important;
+    color: #e5e7eb !important;
 }
 
-/* =========================
-   MAIN CONTENT AREA (IMPORTANT FIX)
-========================= */
-[data-testid="stAppViewContainer"] {
-    background-color: #eef4fb;
+/* Main app */
+.stApp,
+[data-testid="stAppViewContainer"],
+section.main,
+.block-container,
+.main > div {
+    background-color: #0b1220 !important;
+    color: #e5e7eb !important;
 }
 
-/* main block container */
-.block-container {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-    padding-left: 3rem;
-    padding-right: 3rem;
-    background-color: #eef4fb;
-}
-
-/* =========================
-   SIDEBAR (KEEP STRONG)
-========================= */
+/* Sidebar */
 section[data-testid="stSidebar"] {
-    background-color: #0f172a;
+    background-color: #111827 !important;
 }
-
 section[data-testid="stSidebar"] * {
-    color: white;
+    color: #f9fafb !important;
 }
 
-/* =========================
-   HEADINGS
-========================= */
-h1, h2, h3 {
-    color: #0f172a;
-    font-weight: 700;
+/* Headings */
+h1, h2, h3, h4 {
+    color: #f9fafb !important;
 }
 
-/* =========================
-   METRIC CARDS (MAKE VISIBLE)
-========================= */
+/* Paragraphs / markdown */
+p, span, div, label {
+    color: #d1d5db !important;
+}
+
+/* Metrics */
 div[data-testid="stMetric"] {
-    background: white;
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0px 6px 18px rgba(0,0,0,0.10);
-    border: 1px solid #e6eef7;
+    background: #111827 !important;
+    border: 1px solid #1f2937 !important;
+    border-radius: 16px !important;
+    padding: 18px !important;
+    box-shadow: 0px 4px 14px rgba(0,0,0,0.35) !important;
+}
+div[data-testid="stMetric"] label,
+div[data-testid="stMetric"] div {
+    color: #f9fafb !important;
 }
 
-/* =========================
-   BUTTONS
-========================= */
+/* Buttons */
 .stButton button {
-    background-color: #2563eb;
-    color: white;
-    border-radius: 10px;
-    padding: 0.6rem 1rem;
-    border: none;
-    font-weight: 600;
+    background-color: #2563eb !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
 }
-
 .stButton button:hover {
-    background-color: #1d4ed8;
+    background-color: #1d4ed8 !important;
 }
 
-/* =========================
-   INFO BOXES
-========================= */
+/* Selectbox */
+div[data-baseweb="select"] > div {
+    background-color: #111827 !important;
+    color: #f9fafb !important;
+    border: 1px solid #374151 !important;
+}
+
+/* Alert boxes */
 div.stAlert {
-    border-radius: 14px;
-    border: 1px solid #dbeafe;
+    background-color: #111827 !important;
+    color: #f9fafb !important;
+    border-radius: 14px !important;
+    border: 1px solid #1f2937 !important;
 }
 
-/* =========================
-   REMOVE WHITE “FLAT LOOK”
-========================= */
-[data-testid="stVerticalBlock"] {
-    gap: 1rem;
+/* Divider */
+hr {
+    border-color: #1f2937 !important;
+}
+
+/* Caption */
+[data-testid="stCaptionContainer"] {
+    color: #9ca3af !important;
 }
 
 </style>
 """, unsafe_allow_html=True)
-
 # =============================
 # LOAD DATA (ONLY 2 FILES)
 # =============================
@@ -196,10 +197,13 @@ fig = px.bar(
 )
 
 fig.update_layout(
-    plot_bgcolor="white",
-    paper_bgcolor="white"
+    plot_bgcolor="#111827",
+    paper_bgcolor="#111827",
+    font=dict(color="#f9fafb"),
+    xaxis=dict(color="#f9fafb"),
+    yaxis=dict(color="#f9fafb"),
+    showlegend=False
 )
-
 fig.update_traces(textposition="outside")
 
 st.plotly_chart(fig, use_container_width=True)
