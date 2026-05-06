@@ -130,32 +130,34 @@ def generate_pdf(gene, row, meta):
     y = height - 60
 
     def draw_section(title, content):
-        nonlocal y
-        c.setFont("Helvetica-Bold", 12)
-        c.drawString(50, y, title)
-        y -= 20
-        c.setFont("Helvetica", 11)
+    nonlocal y
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(50, y, title)
+    y -= 20
+    c.setFont("Helvetica", 11)
 
-        if isinstance(content, list):
-            for line in content:
-                c.drawString(65, y, f"- {line}")
-                y -= 18
-        else:
-            import textwrap
+    if isinstance(content, list):
+        for line in content:
+            c.drawString(65, y, f"- {line}")
+            y -= 18
+    else:
+        import textwrap
 
-            wrapped_lines = []
-            for paragraph in content.split("\n"):
-                wrapped_lines.extend(textwrap.wrap(paragraph, width=90))
-                wrapped_lines.append("")
+        wrapped_lines = []
+        for paragraph in content.split("\n"):
+            wrapped_lines.extend(textwrap.wrap(paragraph, width=90))
+            wrapped_lines.append("")
 
-           text = c.beginText(50, y)
-           text.setFont("Helvetica", 11)
+        text = c.beginText(50, y)
+        text.setFont("Helvetica", 11)
 
-          for line in wrapped_lines:
-              text.textLine(line)
-              y -= 15
+        for line in wrapped_lines:
+            text.textLine(line)
+            y -= 15
 
-          c.drawText(text)
+        c.drawText(text)
+
+    y -= 10
 
     c.setFont("Helvetica-Bold", 18)
     c.drawString(50, y, "BC Gene Explorer – Biomarker Summary Report")
