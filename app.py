@@ -141,14 +141,21 @@ def generate_pdf(gene, row, meta):
                 c.drawString(65, y, f"- {line}")
                 y -= 18
         else:
-            text = c.beginText(50, y)
-            text.setFont("Helvetica", 11)
-            for line in content.split("\\n"):
-                text.textLine(line)
-                y -= 15
-            c.drawText(text)
+            import textwrap
 
-        y -= 10
+            wrapped_lines = []
+            for paragraph in content.split("\n"):
+                wrapped_lines.extend(textwrap.wrap(paragraph, width=90))
+                wrapped_lines.append("")
+
+           text = c.beginText(50, y)
+           text.setFont("Helvetica", 11)
+
+          for line in wrapped_lines:
+              text.textLine(line)
+              y -= 15
+
+         c.drawText(text)
 
     c.setFont("Helvetica-Bold", 18)
     c.drawString(50, y, "BC Gene Explorer – Biomarker Summary Report")
