@@ -155,7 +155,7 @@ def generate_pdf(gene, row, meta):
               text.textLine(line)
               y -= 15
 
-         c.drawText(text)
+          c.drawText(text)
 
     c.setFont("Helvetica-Bold", 18)
     c.drawString(50, y, "BC Gene Explorer – Biomarker Summary Report")
