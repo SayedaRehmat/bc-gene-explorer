@@ -5,6 +5,7 @@ import plotly.express as px
 from io import BytesIO
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
+import textwrap
 
 # =============================
 # PAGE CONFIG
@@ -16,40 +17,11 @@ st.set_page_config(
 )
 
 # =============================
-# PROFESSIONAL THEME (FIXED)
+# PROFESSIONAL DARK THEME
 # =============================
-
-
-</style>
 st.markdown("""
 <style>
-<style>
 
-/* Normal buttons */
-.stButton button {
-    background-color: #2563eb !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 10px !important;
-    font-weight: 600 !important;
-}
-
-/* Download button (separate component) */
-.stDownloadButton button {
-    background-color: #2563eb !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 10px !important;
-    font-weight: 600 !important;
-    width: 100% !important;
-}
-
-.stDownloadButton button:hover {
-    background-color: #1d4ed8 !important;
-    color: white !important;
-}
-
-</style>
 /* =========================
    GLOBAL APP
 ========================= */
@@ -109,6 +81,21 @@ div[data-testid="stMetric"] div {
 }
 .stButton button:hover {
     background-color: #1d4ed8 !important;
+    color: white !important;
+}
+
+/* Download Button */
+.stDownloadButton button {
+    background-color: #2563eb !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    width: 100% !important;
+}
+.stDownloadButton button:hover {
+    background-color: #1d4ed8 !important;
+    color: white !important;
 }
 
 /* Selectbox */
@@ -118,12 +105,20 @@ div[data-baseweb="select"] > div {
     border: 1px solid #374151 !important;
 }
 
-/* Alert boxes */
+/* Alert boxes - unified same color */
 div.stAlert {
     background-color: #111827 !important;
     color: #f9fafb !important;
     border-radius: 14px !important;
     border: 1px solid #1f2937 !important;
+}
+
+/* Force same style for all alert types */
+div[data-baseweb="notification"] {
+    background-color: #111827 !important;
+    color: #f9fafb !important;
+    border: 1px solid #1f2937 !important;
+    border-radius: 14px !important;
 }
 
 /* Divider */
@@ -138,8 +133,9 @@ hr {
 
 </style>
 """, unsafe_allow_html=True)
+
 # =============================
-# LOAD DATA (ONLY 2 FILES)
+# LOAD DATA
 # =============================
 @st.cache_data
 def load_expression():
@@ -152,12 +148,11 @@ def load_gene_info():
 
 expr_df = load_expression()
 gene_info = load_gene_info()
-def generate_pdf(gene, row, meta):
-    from io import BytesIO
-    from reportlab.lib.pagesizes import A4
-    from reportlab.pdfgen import canvas
-    import textwrap
 
+# =============================
+# PDF GENERATOR
+# =============================
+def generate_pdf(gene, row, meta):
     buffer = BytesIO()
     c = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
@@ -224,12 +219,12 @@ def generate_pdf(gene, row, meta):
     c.save()
     buffer.seek(0)
     return buffer
+
 # =============================
 # HEADER
 # =============================
 st.title("🧬 BC Gene Explorer")
 st.markdown("**Breast cancer gene expression & biomarker interpretation platform (mock prototype)**")
-
 st.divider()
 
 # =============================
@@ -245,10 +240,8 @@ selected_gene = st.sidebar.selectbox(
 gene_row = expr_df[expr_df["gene"] == selected_gene].iloc[0]
 gene_meta = gene_info[selected_gene]
 
-# =============================
-# REPORT BUTTON (FIXED FEATURE)
-# =============================
 st.sidebar.divider()
+
 pdf_buffer = generate_pdf(selected_gene, gene_row, gene_meta)
 
 st.sidebar.download_button(
@@ -262,13 +255,11 @@ st.sidebar.download_button(
 # SUMMARY METRICS
 # =============================
 col1, col2, col3 = st.columns(3)
-
 col1.metric("Tumor Expression", gene_row["tumor_mean"])
 col2.metric("Normal Expression", gene_row["normal_mean"])
 col3.metric("log2 Fold Change", gene_row["log2_fc"])
 
 st.markdown(f"### Status: **{gene_row['status']}**")
-
 st.divider()
 
 # =============================
@@ -298,9 +289,9 @@ fig.update_layout(
     yaxis=dict(color="#f9fafb"),
     showlegend=False
 )
-fig.update_traces(textposition="outside")
 
-st.plotly_chart(fig, use_container_width=True)
+fig.update_traces(textposition="outside")
+st.plotly_chart(fig, width='stretch')
 
 # =============================
 # BIOLOGICAL INTERPRETATION
@@ -314,18 +305,17 @@ with c1:
     st.info(f"**Pathway**\n\n{gene_meta['pathway']}")
 
 with c2:
-    st.success(f"**Biomarker Role**\n\n{gene_meta['biomarker_role']}")
-    st.warning(f"**Clinical Insight**\n\n{gene_meta['clinical_note']}")
+    st.info(f"**Biomarker Role**\n\n{gene_meta['biomarker_role']}")
+    st.info(f"**Clinical Insight**\n\n{gene_meta['clinical_note']}")
 
 st.divider()
 
 # =============================
-# STATISTICS PANEL
+# STATISTICAL SUMMARY
 # =============================
 st.subheader("Statistical Summary")
 
 c1, c2 = st.columns(2)
-
 c1.metric("P-value", gene_row["p_value"])
 c2.metric("Expression Status", gene_row["status"])
 
@@ -333,4 +323,4 @@ c2.metric("Expression Status", gene_row["status"])
 # FOOTER
 # =============================
 st.divider()
-st.caption("BC Gene Explorer | Mock translational bioinformatics dashboard ")
+st.caption("BC Gene Explorer | Mock translational bioinformatics dashboard")
