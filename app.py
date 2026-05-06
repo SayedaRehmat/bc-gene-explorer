@@ -124,40 +124,44 @@ def load_gene_info():
 expr_df = load_expression()
 gene_info = load_gene_info()
 def generate_pdf(gene, row, meta):
+    from io import BytesIO
+    from reportlab.lib.pagesizes import A4
+    from reportlab.pdfgen import canvas
+    import textwrap
+
     buffer = BytesIO()
     c = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
     y = height - 60
 
     def draw_section(title, content):
-    nonlocal y
-    c.setFont("Helvetica-Bold", 12)
-    c.drawString(50, y, title)
-    y -= 20
-    c.setFont("Helvetica", 11)
+        nonlocal y
 
-    if isinstance(content, list):
-        for line in content:
-            c.drawString(65, y, f"- {line}")
-            y -= 18
-    else:
-        import textwrap
+        c.setFont("Helvetica-Bold", 12)
+        c.drawString(50, y, title)
+        y -= 20
+        c.setFont("Helvetica", 11)
 
-        wrapped_lines = []
-        for paragraph in content.split("\n"):
-            wrapped_lines.extend(textwrap.wrap(paragraph, width=90))
-            wrapped_lines.append("")
+        if isinstance(content, list):
+            for line in content:
+                c.drawString(65, y, f"- {line}")
+                y -= 18
+        else:
+            wrapped_lines = []
+            for paragraph in content.split("\n"):
+                wrapped_lines.extend(textwrap.wrap(paragraph, width=90))
+                wrapped_lines.append("")
 
-        text = c.beginText(50, y)
-        text.setFont("Helvetica", 11)
+            text = c.beginText(50, y)
+            text.setFont("Helvetica", 11)
 
-        for line in wrapped_lines:
-            text.textLine(line)
-            y -= 15
+            for line in wrapped_lines:
+                text.textLine(line)
+                y -= 15
 
-        c.drawText(text)
+            c.drawText(text)
 
-    y -= 10
+        y -= 10
 
     c.setFont("Helvetica-Bold", 18)
     c.drawString(50, y, "BC Gene Explorer – Biomarker Summary Report")
@@ -185,6 +189,7 @@ def generate_pdf(gene, row, meta):
         f"and normal tissue, consistent with known breast cancer signaling behavior. "
         f"This marker may provide useful translational context for biomarker interpretation."
     )
+
     draw_section("Interpretation Summary", summary)
 
     c.save()
