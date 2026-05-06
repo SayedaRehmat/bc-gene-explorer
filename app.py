@@ -2,8 +2,9 @@ import streamlit as st
 import pandas as pd
 import json
 import plotly.express as px
-import subprocess
-import os
+from io import BytesIO
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
 
 # =============================
 # PAGE CONFIG
@@ -122,7 +123,64 @@ def load_gene_info():
 
 expr_df = load_expression()
 gene_info = load_gene_info()
+def generate_pdf(gene, row, meta):
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
+    y = height - 60
 
+    def draw_section(title, content):
+        nonlocal y
+        c.setFont("Helvetica-Bold", 12)
+        c.drawString(50, y, title)
+        y -= 20
+        c.setFont("Helvetica", 11)
+
+        if isinstance(content, list):
+            for line in content:
+                c.drawString(65, y, f"- {line}")
+                y -= 18
+        else:
+            text = c.beginText(50, y)
+            text.setFont("Helvetica", 11)
+            for line in content.split("\\n"):
+                text.textLine(line)
+                y -= 15
+            c.drawText(text)
+
+        y -= 10
+
+    c.setFont("Helvetica-Bold", 18)
+    c.drawString(50, y, "BC Gene Explorer – Biomarker Summary Report")
+    y -= 40
+
+    c.setFont("Helvetica-Bold", 14)
+    c.drawString(50, y, f"Gene: {gene}")
+    y -= 30
+
+    draw_section("Expression Summary", [
+        f"Tumor Mean: {row['tumor_mean']}",
+        f"Normal Mean: {row['normal_mean']}",
+        f"log2 Fold Change: {row['log2_fc']}",
+        f"P-value: {row['p_value']}",
+        f"Status: {row['status']}"
+    ])
+
+    draw_section("Biological Function", meta["function"])
+    draw_section("Pathway", meta["pathway"])
+    draw_section("Biomarker Role", meta["biomarker_role"])
+    draw_section("Clinical Interpretation", meta["clinical_note"])
+
+    summary = (
+        f"{gene} shows biologically relevant expression differences between tumor "
+        f"and normal tissue, consistent with known breast cancer signaling behavior. "
+        f"This marker may provide useful translational context for biomarker interpretation."
+    )
+    draw_section("Interpretation Summary", summary)
+
+    c.save()
+    buffer.seek(0)
+    return buffer
 # =============================
 # HEADER
 # =============================
@@ -148,21 +206,14 @@ gene_meta = gene_info[selected_gene]
 # REPORT BUTTON (FIXED FEATURE)
 # =============================
 st.sidebar.divider()
+pdf_buffer = generate_pdf(selected_gene, gene_row, gene_meta)
 
-if st.sidebar.button("📄 Generate PDF Report"):
-    with st.spinner("Generating report..."):
-        result = subprocess.run(
-            ["python", "report.py"],
-            capture_output=True,
-            text=True
-        )
-
-    if result.returncode == 0:
-        st.sidebar.success("Report generated successfully")
-        st.sidebar.info("Saved in reports/sample_gene_report.pdf")
-    else:
-        st.sidebar.error("Report generation failed")
-        st.sidebar.text(result.stderr)
+st.sidebar.download_button(
+    label="📄 Download PDF Report",
+    data=pdf_buffer,
+    file_name=f"{selected_gene}_biomarker_report.pdf",
+    mime="application/pdf"
+)
 
 # =============================
 # SUMMARY METRICS
@@ -239,4 +290,4 @@ c2.metric("Expression Status", gene_row["status"])
 # FOOTER
 # =============================
 st.divider()
-st.caption("BC Gene Explorer | Mock translational bioinformatics dashboard (Streamlit prototype)")
+st.caption("BC Gene Explorer | Mock translational bioinformatics dashboard ")
