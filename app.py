@@ -224,7 +224,7 @@ def generate_pdf(gene, row, meta):
 # HEADER
 # =============================
 st.title("🧬 BC Gene Explorer")
-st.markdown("**Breast cancer gene expression & biomarker interpretation platform **")
+st.markdown("**Breast cancer gene expression & biomarker interpretation platform**")
 st.divider()
 
 # =============================
