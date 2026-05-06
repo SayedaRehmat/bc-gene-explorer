@@ -18,6 +18,11 @@ st.set_page_config(
 # =============================
 # PROFESSIONAL THEME (FIXED)
 # =============================
+
+
+</style>
+st.markdown("""
+<style>
 <style>
 
 /* Normal buttons */
@@ -45,9 +50,6 @@ st.set_page_config(
 }
 
 </style>
-st.markdown("""
-<style>
-
 /* =========================
    GLOBAL APP
 ========================= */
