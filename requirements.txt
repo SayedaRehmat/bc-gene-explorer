@@ -2,4 +2,4 @@ streamlit
 pandas
 matplotlib
 plotly
-reportlab
+reportlab==4.2.2
