@@ -18,6 +18,33 @@ st.set_page_config(
 # =============================
 # PROFESSIONAL THEME (FIXED)
 # =============================
+<style>
+
+/* Normal buttons */
+.stButton button {
+    background-color: #2563eb !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+}
+
+/* Download button (separate component) */
+.stDownloadButton button {
+    background-color: #2563eb !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    width: 100% !important;
+}
+
+.stDownloadButton button:hover {
+    background-color: #1d4ed8 !important;
+    color: white !important;
+}
+
+</style>
 st.markdown("""
 <style>
 
